@@ -125,6 +125,11 @@
             border: none;
         }
         
+        .btn-primary:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
         .friend-section {
             background-color: #F9F9F9;
             border-radius: 8px;
@@ -152,87 +157,94 @@
     </style>
 </head>
 <body>
-    <div class="registration-card">
+
+<div class="registration-card">
         <h1>Заявка на регистрацию для мероприятия</h1>
         
-        <div class="form-group">
-            <label for="event-type" class="required">Тип мероприятия</label>
-            <select id="event-type" required aria-label="Выберите тип мероприятия">
-                <option value="" disabled selected>Выберите вид мероприятия</option>
-                <option value="conference">Конференция</option>
-                <option value="seminar">Семинар</option>
-                <option value="workshop">Мастер-класс</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="full-name" class="required">ФИО</label>
-            <input type="text" id="full-name" placeholder="Введите ФИО" required aria-label="Введите ваше ФИО">
-        </div>
-        
-        <div class="form-group">
-            <label for="email" class="required">Имейл</label>
-            <input type="email" id="email" placeholder="Введите имейл" required aria-label="Введите ваш email">
-        </div>
-        
-        <div class="form-group">
-            <label for="phone" class="required">Номер телефона</label>
-            <input type="tel" id="phone" placeholder="+7 777 77 77" required aria-label="Введите ваш телефон">
-        </div>
-        
-        <hr class="divider" aria-hidden="true">
-        
-        <div id="friendsContainer"></div>
-        
-        <button type="button" class="add-friend-btn" id="addFriendBtn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 6V12M12 12V18M12 12H18M12 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Добавить друга (осталось <span id="friendsLeft">3</span>)
-        </button>
-        
-        <div class="form-group">
-            <label for="communication" class="required">Предпочитаемый вид связи</label>
-            <select id="communication" required aria-label="Выберите вид связи">
-                <option value="" disabled selected>Выберите предпочитаемый вид связи</option>
-                <option value="phone">Телефон</option>
-                <option value="email">Email</option>
-                <option value="whatsapp">WhatsApp</option>
-            </select>
-        </div>
-        
-        <div class="action-buttons">
-            <button type="button" class="btn btn-secondary" id="backBtn">Назад</button>
-            <button type="submit" class="btn btn-primary" id="nextBtn">Дальше</button>
-        </div>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="event-type" class="required">Тип мероприятия</label>
+                <select id="event-type" required>
+                    <option value="" disabled selected>Выберите вид мероприятия</option>
+                    <option value="conference">Конференция</option>
+                    <option value="seminar">Семинар</option>
+                    <option value="workshop">Мастер-класс</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="full-name" class="required">ФИО</label>
+                <input type="text" id="full-name" placeholder="Введите ФИО" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="required">Имейл</label>
+                <input type="email" id="email" placeholder="Введите имейл" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone" class="required">Номер телефона</label>
+                <input type="tel" id="phone" placeholder="+7 777 77 77" required>
+            </div>
+            
+            <hr class="divider">
+            
+            <div id="friendsContainer"></div>
+            
+            <button type="button" class="add-friend-btn" id="addFriendBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 6V12M12 12V18M12 12H18M12 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Добавить друга (осталось <span id="friendsLeft">3</span>)
+            </button>
+            
+            <div class="form-group">
+                <label for="communication" class="required">Предпочитаемый вид связи</label>
+                <select id="communication" required>
+                    <option value="" disabled selected>Выберите предпочитаемый вид связи</option>
+                    <option value="phone">Телефон</option>
+                    <option value="email">Email</option>
+                    <option value="whatsapp">WhatsApp</option>
+                </select>
+            </div>
+            
+            <div class="action-buttons">
+                <button type="button" class="btn btn-secondary" id="backBtn">Назад</button>
+                <button type="submit" class="btn btn-primary" id="nextBtn">Дальше</button>
+            </div>
+        </form>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const MAX_FRIENDS = 3;
             let friendsCount = 0;
+            const form = document.getElementById('registrationForm');
             const friendsContainer = document.getElementById('friendsContainer');
             const addFriendBtn = document.getElementById('addFriendBtn');
             const friendsLeftSpan = document.getElementById('friendsLeft');
+            const nextBtn = document.getElementById('nextBtn');
             
             function updateFriendsCounter() {
                 const left = MAX_FRIENDS - friendsCount;
                 friendsLeftSpan.textContent = left;
                 addFriendBtn.disabled = left <= 0;
+                
+                nextBtn.disabled = !form.checkValidity();
             }
             
             function addFriendSection() {
                 if (friendsCount >= MAX_FRIENDS) return;
                 
                 friendsCount++;
-                const friendId = `friend-${friendsCount}`;
+                const friendId = friend-${friendsCount};
                 
                 const friendSection = document.createElement('div');
                 friendSection.className = 'friend-section';
                 friendSection.id = friendId;
                 friendSection.innerHTML = `
                     <div class="friend-title">Друг #${friendsCount}</div>
-                    <button class="remove-friend" data-friend="${friendId}">Удалить</button>
+
+<button type="button" class="remove-friend" data-friend="${friendId}">Удалить</button>
                     <div class="form-group">
                         <label for="${friendId}-name" class="required">ФИО</label>
                         <input type="text" id="${friendId}-name" placeholder="Введите ФИО друга" required>
@@ -255,6 +267,11 @@
                     friendsCount--;
                     updateFriendsCounter();
                 });
+                
+                const inputs = friendSection.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.addEventListener('input', updateFriendsCounter);
+                });
             }
             
             addFriendBtn.addEventListener('click', addFriendSection);
@@ -263,15 +280,21 @@
                 window.history.back();
             });
             
-            document.getElementById('nextBtn').addEventListener('click', (e) => {
-                if (!document.querySelector('form').checkValidity()) {
-                    e.preventDefault();
-                    alert('Пожалуйста, заполните все обязательные поля');
-                } else {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (form.checkValidity()) {
                     alert('Форма успешно отправлена!');
+                    // Здесь можно добавить отправку данных на сервер
                 }
             });
             
+            const mainInputs = form.querySelectorAll('input, select');
+            mainInputs.forEach(input => {
+                input.addEventListener('input', updateFriendsCounter);
+                input.addEventListener('change', updateFriendsCounter);
+            });
+            
+
             updateFriendsCounter();
         });
     </script>
