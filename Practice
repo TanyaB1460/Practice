@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка на регистрацию</title>
+    <style>
+        :root {
+            --primary-color: #3369F3;
+            --secondary-color: #F5F5F5;
+            --border-color: #E6E6E6;
+            --text-primary: #1E1E1E;
+            --text-secondary: #666;
+            --error-color: #FF3333;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #F8F9FA;
+            padding: 24px;
+            margin: 0;
+            color: var(--text-primary);
+        }
+        
+        .registration-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 32px;
+        }
+        
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        label.required::after {
+            content: " *";
+            color: var(--error-color);
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(51, 105, 243, 0.1);
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 24px 0;
+            border: none;
+        }
+        
+        .add-friend-btn {
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 14px;
+            background: none;
+            border: none;
+            padding: 8px 0;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .add-friend-btn svg {
+            margin-right: 8px;
+        }
+        
+        .add-friend-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .friend-section {
+            background-color: #F9F9F9;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .remove-friend {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--error-color);
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .friend-title {
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-card">
+        <h1>Заявка на регистрацию для мероприятия</h1>
+        
+        <div class="form-group">
+            <label for="event-type" class="required">Тип мероприятия</label>
+            <select id="event-type" required aria-label="Выберите тип мероприятия">
+                <option value="" disabled selected>Выберите вид мероприятия</option>
+                <option value="conference">Конференция</option>
+                <option value="seminar">Семинар</option>
+                <option value="workshop">Мастер-класс</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="full-name" class="required">ФИО</label>
+            <input type="text" id="full-name" placeholder="Введите ФИО" required aria-label="Введите ваше ФИО">
+        </div>
+        
+        <div class="form-group">
+            <label for="email" class="required">Имейл</label>
+            <input type="email" id="email" placeholder="Введите имейл" required aria-label="Введите ваш email">
+        </div>
+        
+        <div class="form-group">
+            <label for="phone" class="required">Номер телефона</label>
+            <input type="tel" id="phone" placeholder="+7 777 77 77" required aria-label="Введите ваш телефон">
+        </div>
+        
+        <hr class="divider" aria-hidden="true">
+        
+        <div id="friendsContainer"></div>
+        
+        <button type="button" class="add-friend-btn" id="addFriendBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 6V12M12 12V18M12 12H18M12 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Добавить друга (осталось <span id="friendsLeft">3</span>)
+        </button>
+        
+        <div class="form-group">
+            <label for="communication" class="required">Предпочитаемый вид связи</label>
+            <select id="communication" required aria-label="Выберите вид связи">
+                <option value="" disabled selected>Выберите предпочитаемый вид связи</option>
+                <option value="phone">Телефон</option>
+                <option value="email">Email</option>
+                <option value="whatsapp">WhatsApp</option>
+            </select>
+        </div>
+        
+        <div class="action-buttons">
+            <button type="button" class="btn btn-secondary" id="backBtn">Назад</button>
+            <button type="submit" class="btn btn-primary" id="nextBtn">Дальше</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const MAX_FRIENDS = 3;
+            let friendsCount = 0;
+            const friendsContainer = document.getElementById('friendsContainer');
+            const addFriendBtn = document.getElementById('addFriendBtn');
+            const friendsLeftSpan = document.getElementById('friendsLeft');
+            
+            function updateFriendsCounter() {
+                const left = MAX_FRIENDS - friendsCount;
+                friendsLeftSpan.textContent = left;
+                addFriendBtn.disabled = left <= 0;
+            }
+            
+            function addFriendSection() {
+                if (friendsCount >= MAX_FRIENDS) return;
+                
+                friendsCount++;
+                const friendId = `friend-${friendsCount}`;
+                
+                const friendSection = document.createElement('div');
+                friendSection.className = 'friend-section';
+                friendSection.id = friendId;
+                friendSection.innerHTML = `
+                    <div class="friend-title">Друг #${friendsCount}</div>
+                    <button class="remove-friend" data-friend="${friendId}">Удалить</button>
+                    <div class="form-group">
+                        <label for="${friendId}-name" class="required">ФИО</label>
+                        <input type="text" id="${friendId}-name" placeholder="Введите ФИО друга" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="${friendId}-email" class="required">Имейл</label>
+                        <input type="email" id="${friendId}-email" placeholder="Введите имейл друга" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="${friendId}-phone" class="required">Номер телефона</label>
+                        <input type="tel" id="${friendId}-phone" placeholder="+7 777 77 77" required>
+                    </div>
+                `;
+                
+                friendsContainer.appendChild(friendSection);
+                updateFriendsCounter();
+                
+                friendSection.querySelector('.remove-friend').addEventListener('click', function() {
+                    friendsContainer.removeChild(document.getElementById(this.dataset.friend));
+                    friendsCount--;
+                    updateFriendsCounter();
+                });
+            }
+            
+            addFriendBtn.addEventListener('click', addFriendSection);
+            
+            document.getElementById('backBtn').addEventListener('click', () => {
+                window.history.back();
+            });
+            
+            document.getElementById('nextBtn').addEventListener('click', (e) => {
+                if (!document.querySelector('form').checkValidity()) {
+                    e.preventDefault();
+                    alert('Пожалуйста, заполните все обязательные поля');
+                } else {
+                    alert('Форма успешно отправлена!');
+                }
+            });
+            
+            updateFriendsCounter();
+        });
+    </script>
+</body>
+</html>
